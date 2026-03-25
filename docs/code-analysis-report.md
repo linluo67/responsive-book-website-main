@@ -61,13 +61,14 @@ responsive-book-website-main/
 ## 四、核心交互逻辑分析
 
 ### 1. 搜索弹窗实现
-- **触发点**：`#search-button`点击事件
-- **实现方式**：通过classList.toggle()添加/移除`.show-search`类控制显示/隐藏
-- **依赖DOM**：`#search-content`
+- **触发点**：`#search-button`点击打开，`#search-close`点击关闭
+- **实现方式**：打开时通过`classList.add('show-search')`显示，关闭时通过`classList.remove('show-search')`隐藏
+- **依赖DOM**：`#search-button`、`#search-close`、`#search-content`
 
 ### 2. 登录弹窗实现
-- **触发点**：`#login-button`点击事件
-- **实现方式**：通过classList.toggle()添加/移除`.show-login`类控制显示/隐藏
+- **触发点**：`#login-button`点击打开，`#login-close`点击关闭
+- **实现方式**：打开时通过`classList.add('show-login')`显示，关闭时通过`classList.remove('show-login')`隐藏
+- **依赖DOM**：`#login-button`、`#login-close`、`#login-content`
 
 ### 3. 滚动阴影
 - **触发点**：window.scroll事件
@@ -118,30 +119,39 @@ responsive-book-website-main/
 - **修改建议**：添加`type="button"`和`aria-label`属性
 
 ### 问题4：表单缺少label
-- **现象或风险**：搜索表单input缺少关联label
-- **修改建议**：为无障碍访问优化
+- **严重级别**：中
+- **位置**：index.html第81-84行
+- **现象或风险**：搜索表单input缺少关联label，不利于屏幕阅读器识别
+- **原因分析**：无障碍访问考虑不足
+- **修改建议**：添加视觉隐藏的label标签或使用aria-label属性
 
 ### 问题5：Testimonial卡片重复内容
 - **严重级别**：中
-- **现象或风险**：4个评价卡片内容完全相同，影响用户信任度
-- **原因分析**：模板复制未修改内容
-- **修改建议**：修改为不同的用户评价内容
+- **位置**：index.html第839-907行
+- **现象或风险**：4个评价卡片的用户名、评价内容完全相同，影响用户信任度
+- **原因分析**：模板复制后未修改内容，数据重复
+- **修改建议**：修改为不同的用户名和多样化的用户评价内容
 
 ### 问题6：CSS重复定义
 - **严重级别**：低
 - **位置**：styles.css第440-447行
-- **现象或风险**：.button选择器有两个padding定义
-- **修改建议**：删除重复的padding定义
+- **现象或风险**：.button选择器有两个padding定义（`padding: 1rem 2rem;`和`padding: 1rem 1.5rem;`），可能导致样式混乱
+- **原因分析**：代码编写失误，重复定义属性
+- **修改建议**：删除其中一个重复的padding定义
 
-### 问题7：new模块重复内容
+### 问题7：New模块swiper重复初始化
 - **严重级别**：低
-- **现象或风险**：两个.swiper内容重复展示相同数据，数据冗余
-- **修改建议**：优化数据去重
+- **位置**：main.js第88-99行
+- **现象或风险**：两个.new__swiper使用相同的配置初始化，但HTML中实际有两个重复的swiper结构展示相同数据
+- **原因分析**：设计意图可能是展示两排新书，但数据重复冗余
+- **修改建议**：若确需两排展示则保留，否则可移除一个swiper并调整布局
 
-### 问题8：缺少alt属性值重复
+### 问题8：图片alt属性缺乏语义
 - **严重级别**：低
-- **现象或风险**：图片alt属性均为"image"，不利于SEO和无障碍访问
-- **修改建议**：修改为有意义的描述文本
+- **位置**：index.html所有img标签
+- **现象或风险**：大部分图片alt属性均为"image"，缺乏具体描述，不利于SEO和无障碍访问
+- **原因分析**：模板编写时未考虑alt语义化
+- **修改建议**：将alt属性修改为有意义的描述文本，如"Book cover"、"User portrait"等
 
 
 ## 六、可维护性与扩展建议
